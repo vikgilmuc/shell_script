@@ -1,0 +1,159 @@
+#!/bin/bash
+
+# sysinfo_page - Script to create a tree 
+
+
+
+function change_to_dir()
+{
+if [ -d $filename ]; then
+
+	 cd $dirname
+			
+	 else
+ 
+		echo -n "directory doesn´t exist. create it? (y/n) > "
+			 read response
+    		if [ "$response" != "y" ]; then
+    			mkdir $dirname
+    			echo "directorio creado"
+    		
+    		fi
+    	
+  fi
+
+}
+
+
+
+
+interactive()
+{
+
+echo "interactive is on"
+
+
+
+
+				option=
+
+				until [ $selection = 0]; do
+
+
+				clear
+				echo
+
+				echo "you are in" ; pwd 
+				echo " directorios "; ls -d */
+				
+				echo 
+				echo "1.- create a directory "
+				echo "2.- create a file"
+				echo "3.- cambiar a un directorio"
+				echo "4.- buscar un fichero o directorio"
+				echo "5.- exit"
+				
+
+
+				read option
+
+
+
+				case $option in
+					1 )
+						echo "nombre del nuevo directorio"
+						read dirname
+						mkdir  $dirname
+						;;
+					2 )
+						echo "nombre del nuevo fichero"
+						read filename
+
+						if [ -f $filename ]; then
+        					echo -n "Output file exists. Overwrite? (y/n) > "
+       						 read response
+				        		if [ "$response" != "y" ]; then
+				        			touch  $filename
+				        			echo "fichero sobreescrito"
+				        		
+
+				            
+				        		fi
+				        	else
+							touch  $filename
+    					fi
+						
+						;;
+
+					3 )	echo "nombre del directorio destino"
+						read dirname
+						#if 
+						
+						change_to_dir dirname;;
+					 
+					4 )  echo "nombre del directorio destino"
+						read dirname
+						#if 
+						cd $dirname;;
+						
+
+					5 ) 
+						echo"bye"
+						exit 1
+						;;
+
+					* ) echo "You did not enter a number between 1 and 3."
+				;;
+				esac
+
+
+				done
+
+
+
+}
+
+
+
+usage()
+{
+    echo "usage: sysinfo_page [[[-f file ] [-i]] | [-h]]"
+}
+
+
+
+
+######     main 
+
+
+interactive=
+filename=~/sysinfo_page.html
+
+
+
+while [ "$1" != "" ]; do
+    case $1 in
+        -b | --file )           shift
+                                filename=$1
+                                ;;
+        -i | --interactive )    interactive=1
+                                ;;
+        -h | --help )           usage
+                                exit
+                                ;;
+        * )                     usage
+                                exit 1
+    esac
+    shift
+done
+
+
+if [ "$interactive" = "1" ]; then
+	echo "interactive is on"
+	interactive	
+
+else
+	echo "interactive is off"
+fi
+echo "output file = $filename"
+
